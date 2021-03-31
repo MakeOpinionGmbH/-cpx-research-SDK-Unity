@@ -1,4 +1,4 @@
-# CPX Research Android SDK
+# CPX Research Unity SDK
 
 #### Monetize your product with fun surveys.
 
