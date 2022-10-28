@@ -39,13 +39,21 @@ public class CPXResearchScript : MonoBehaviour, IPointerClickHandler, ICPXResear
             Callback = this
         };
         cpx.SetSurveyVisible(true);
-        StartCoroutine(cpx.RequestSurveyUpdate(false));
+        StartCoroutine(cpx.RequestSurveyUpdate(true));
     }
 
     // Update is called once per frame
     void Update()
     {
 
+    }
+
+    void OnApplicationPause(bool pauseStatus)
+    {
+        if (!pauseStatus && cpx != null)
+        {
+            StartCoroutine(cpx.RequestSurveyUpdate(true));
+        }
     }
 
     public void OnPointerClick(PointerEventData eventData)
@@ -73,10 +81,20 @@ public class CPXResearchScript : MonoBehaviour, IPointerClickHandler, ICPXResear
 
     void ICPXResearch.OnTransactionsUpdated(CPXResearchLib.TransactionItem[] UnpaidTransactions)
     {
-        foreach (CPXResearchLib.TransactionItem item in cpx.UnpaidTransactions)
+        if (UnpaidTransactions != null)
         {
-            Debug.Log($"Transaction: {item.TransactionId}");
-        }
+            double amount = 0;
+            foreach (CPXResearchLib.TransactionItem item in cpx.UnpaidTransactions)
+            {
+                Debug.Log($"Transaction: {item.TransactionId}");
+                if (double.TryParse(item.VerdienstPublisher, out double earning))
+                {
+                    amount += earning;
+                }
+                Debug.Log($"Amount: {amount}");
+                cpx.MarkTransactionAsPaid(item.MessageId);
+            }
+        }        
     } 
 
     void ICPXResearch.OnSurveysDidOpen()
