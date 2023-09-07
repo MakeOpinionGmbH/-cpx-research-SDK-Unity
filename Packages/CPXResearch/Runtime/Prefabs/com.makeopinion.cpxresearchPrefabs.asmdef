@@ -1,0 +1,16 @@
+{
+    "name": "com.makeopinion.cpxresearchPrefabs",
+    "rootNamespace": "",
+    "references": [
+        "GUID:6a535edf6fa1b4a358963ec0424376f8"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -1,0 +1,21 @@
+{
+    "name": "com.makeopinion.cpxresearch",
+    "rootNamespace": "",
+    "references": [
+        "GUID:df2a24f83ece042be84d3276a68393ed"
+    ],
+    "includePlatforms": [
+        "Android",
+        "Editor",
+        "iOS",
+        "macOSStandalone"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -1,0 +1,21 @@
+{
+  "name": "com.makeopinion.cpxresearch",
+  "version": "1.0.0",
+  "displayName": "CPX Research Unity SDK",
+  "description": "Monetize your product with fun surveys.\nWe will make it easy for you: Simply implement our solution and be ready to start monetizing your product immediately! Let users earn your virtual currency by simply participating in exciting and well paid online surveys!\nThis SDK is owned by MakeOpinion GmbH.",
+  "unity": "2019.1",
+  "unityRelease": "0b5",
+  "documentationUrl": "https://github.com/MakeOpinionGmbH/-cpx-research-SDK-Unity/blob/main/README.md",
+  "changelogUrl": "https://github.com/MakeOpinionGmbH/-cpx-research-SDK-Unity",
+  "licensesUrl": "https://github.com/MakeOpinionGmbH/-cpx-research-SDK-Unity",
+  "keywords": [],
+  "dependencies": { },
+  "author": {
+    "name": "Make Opinion GmbH",
+    "email": "unity@example.com",
+    "url": "https://cpx-research.com/"
+  },
+  "git-dependencies": [
+    "https://github.com/gree/unity-webview.git?path=/dist/package"
+  ]
+}

@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using CPXResearch;
 
+[RequireComponent(typeof(WebViewObject))]
 public class CPXResearchScript : MonoBehaviour, IPointerClickHandler, ICPXResearch
 {
     [Header("Banner")]
@@ -20,8 +21,10 @@ public class CPXResearchScript : MonoBehaviour, IPointerClickHandler, ICPXResear
     public string appId;
     public string extUserId;
     public string secureHash;
+    public bool useExternalDeviceBrowser;
 
     private CPXResearch.CPXResearch cpx;
+    WebViewObject webViewObject;
 
     // Start is called before the first frame update
     void Start()
@@ -56,9 +59,37 @@ public class CPXResearchScript : MonoBehaviour, IPointerClickHandler, ICPXResear
         }
     }
 
+    void OnGUI()
+    {
+        if (webViewObject != null && webViewObject.GetVisibility())
+        {
+            float topMargin = Screen.height - (Screen.safeArea.y + Screen.safeArea.height);
+            GUI.enabled = webViewObject.GetVisibility();
+            GUIStyle myButtonStyle = new GUIStyle(GUI.skin.button);
+            myButtonStyle.fontSize = 50;
+            if (GUI.Button(new Rect(Screen.width - 110, 10 + topMargin, 100, 100), "X", myButtonStyle))
+            {
+                webViewObject.SetVisibility(false);
+            }
+            GUI.enabled = true;
+        }
+    }
+
     public void OnPointerClick(PointerEventData eventData)
     {
-        Application.OpenURL(cpx.GetSurveysListUrl());
+        if (useExternalDeviceBrowser)
+        {
+            Application.OpenURL(cpx.GetSurveysListUrl());
+        }
+        else
+        {
+            float topMargin = Screen.height - (Screen.safeArea.y + Screen.safeArea.height);
+            webViewObject = (new GameObject("WebViewObject")).AddComponent<WebViewObject>();
+            webViewObject.Init(separated: false);
+            webViewObject.SetMargins(0, 140 + ((int)topMargin), 0, 0);
+            webViewObject.LoadURL(cpx.GetSurveysListUrl());
+            webViewObject.SetVisibility(true);
+        }
     }
 
     // ICPXResearch impl
