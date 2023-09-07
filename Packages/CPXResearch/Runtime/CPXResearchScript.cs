@@ -96,18 +96,21 @@ public class CPXResearchScript : MonoBehaviour, IPointerClickHandler, ICPXResear
     void ICPXResearch.OnSurveysUpdated()
     {
         Debug.Log($"Surveys received.");
-        StartCoroutine(cpx.GetImage(texture =>
+        if (imageForContent != null)
         {
-            Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.zero);
-
-            if (sprite != null)
+            StartCoroutine(cpx.GetImage(texture =>
             {
-                imageForContent.sprite = sprite;
-            }
-        }, error =>
-        {
-            Debug.LogError(error);
-        }));
+                Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.zero);
+
+                if (sprite != null)
+                {
+                    imageForContent.sprite = sprite;
+                }
+            }, error =>
+            {
+                Debug.LogError(error);
+            }));
+        }
     }
 
     void ICPXResearch.OnTransactionsUpdated(CPXResearchLib.TransactionItem[] UnpaidTransactions)
