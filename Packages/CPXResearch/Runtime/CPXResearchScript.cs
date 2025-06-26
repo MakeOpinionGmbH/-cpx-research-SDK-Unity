@@ -21,10 +21,14 @@ public class CPXResearchScript : MonoBehaviour, IPointerClickHandler, ICPXResear
     public string appId;
     public string extUserId;
     public string secureHash;
+    
+    [Header("WebBrowser")]
     public bool useExternalDeviceBrowser;
+    public string internalWebbrowserGameobjectIdentifier = "CPXResearchBrowser";
 
     private CPXResearch.CPXResearch cpx;
-    WebViewObject webViewObject;
+    private WebViewObject _webViewObject;
+    private GameObject _gameObject;
 
     // Start is called before the first frame update
     void Start()
@@ -41,7 +45,11 @@ public class CPXResearchScript : MonoBehaviour, IPointerClickHandler, ICPXResear
         {
             Callback = this
         };
+        
+        // optional part, remove if you want to use CPXResearch without banners
         cpx.SetSurveyVisible(true);
+        
+        // Request initial data
         StartCoroutine(cpx.RequestSurveyUpdate(true));
     }
 
@@ -61,15 +69,18 @@ public class CPXResearchScript : MonoBehaviour, IPointerClickHandler, ICPXResear
 
     void OnGUI()
     {
-        if (webViewObject != null && webViewObject.GetVisibility())
+        if (_webViewObject && _webViewObject.GetVisibility())
         {
             float topMargin = Screen.height - (Screen.safeArea.y + Screen.safeArea.height);
-            GUI.enabled = webViewObject.GetVisibility();
+            GUI.enabled = _webViewObject.GetVisibility();
             GUIStyle myButtonStyle = new GUIStyle(GUI.skin.button);
             myButtonStyle.fontSize = 50;
             if (GUI.Button(new Rect(Screen.width - 110, 10 + topMargin, 100, 100), "X", myButtonStyle))
             {
-                webViewObject.SetVisibility(false);
+                _webViewObject.SetVisibility(false);
+                Destroy(_gameObject);
+                _webViewObject = null;
+                
             }
             GUI.enabled = true;
         }
@@ -80,15 +91,20 @@ public class CPXResearchScript : MonoBehaviour, IPointerClickHandler, ICPXResear
         if (useExternalDeviceBrowser)
         {
             Application.OpenURL(cpx.GetSurveysListUrl());
+            
+            // Also available urls
+            //cpx.GetSurveyOptionsDialogUrl(); // URL to the options page
+            //cpx.GetSurveyUrlForSurveyId("survey id"); // URL to a specific survey
         }
         else
         {
             float topMargin = Screen.height - (Screen.safeArea.y + Screen.safeArea.height);
-            webViewObject = (new GameObject("WebViewObject")).AddComponent<WebViewObject>();
-            webViewObject.Init(separated: false);
-            webViewObject.SetMargins(0, 140 + ((int)topMargin), 0, 0);
-            webViewObject.LoadURL(cpx.GetSurveysListUrl());
-            webViewObject.SetVisibility(true);
+            _gameObject = new GameObject(internalWebbrowserGameobjectIdentifier);
+            _webViewObject = _gameObject.AddComponent<WebViewObject>();
+            _webViewObject.Init(separated: false);
+            _webViewObject.SetMargins(0, 140 + ((int)topMargin), 0, 0);
+            _webViewObject.LoadURL(cpx.GetSurveysListUrl());
+            _webViewObject.SetVisibility(true);
         }
     }
 
@@ -130,14 +146,4 @@ public class CPXResearchScript : MonoBehaviour, IPointerClickHandler, ICPXResear
             }
         }        
     } 
-
-    void ICPXResearch.OnSurveysDidOpen()
-    {
-        Debug.Log("Did open Surveys.");
-    }
-
-    void ICPXResearch.OnSurveysDidClose()
-    {
-        Debug.Log("Did close Surveys.");
-    }
 }
